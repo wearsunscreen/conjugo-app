@@ -2,10 +2,10 @@
 
 import { useSettings } from '@/context/SettingsContext';
 import type { Tense } from '@/lib/types';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { BookText } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 interface VerbTensesProps {
   tenses: Tense[];
@@ -17,48 +17,46 @@ export function VerbTenses({ tenses }: VerbTensesProps) {
   const filteredTenses = tenses.map((tense) => ({
     ...tense,
     conjugations: tense.conjugations.filter((conj) => {
-      if (!includeTu && conj.person === 'tu') {
+      if (!includeTu && conj.person.toLowerCase() === 'tu') {
         return false;
       }
-      if (!includeVos && conj.person === 'vós') {
+      if (!includeVos && conj.person.toLowerCase() === 'vós') {
         return false;
+      }
+      // Special filter for imperative forms
+      if (tense.name.includes("Imperativo")) {
+         if (conj.person === 'eu') return false;
       }
       return true;
     }),
   }));
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <Accordion type="multiple" className="w-full space-y-2">
       {filteredTenses.map((tense) => (
-        <Card key={tense.name} className="flex flex-col shadow-md hover:shadow-xl transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 font-headline text-xl text-primary/90">
+        <AccordionItem value={tense.name} key={tense.name} className="border-b-0 rounded-lg shadow-md bg-card transition-shadow hover:shadow-lg">
+          <AccordionTrigger className="px-4 py-3 font-headline text-lg text-primary/90 hover:no-underline rounded-lg">
+            <div className="flex items-center gap-3">
               <BookText className="h-5 w-5" />
-              {tense.name}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
+              <span>{tense.name}</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-2 pt-0 pb-2">
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-1/3">Person</TableHead>
-                  <TableHead>Conjugation</TableHead>
-                </TableRow>
-              </TableHeader>
               <TableBody>
                 {tense.conjugations.map((conj) => (
-                  <TableRow key={conj.person}>
-                    <TableCell className="text-muted-foreground">{conj.person}</TableCell>
-                    <TableCell className={cn(conj.isIrregular && 'font-bold text-primary')}>
+                  <TableRow key={conj.person} className="border-none">
+                    <TableCell className="w-1/3 py-2 text-muted-foreground capitalize">{conj.person}</TableCell>
+                    <TableCell className={cn("py-2", conj.isIrregular && 'font-bold text-primary')}>
                       {conj.form}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }
