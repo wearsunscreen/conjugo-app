@@ -12,7 +12,7 @@ export function VerbSearch({ verbs }: { verbs: VerbData[] }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredVerbs = verbs.filter((verb) =>
-    verb.infinitive.toLowerCase().startsWith(searchTerm.toLowerCase())
+    verb.infinitive.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
