@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import type { Tense } from '@/lib/types';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -9,10 +10,38 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 interface VerbTensesProps {
   tenses: Tense[];
+  infinitive: string;
 }
 
-export function VerbTenses({ tenses }: VerbTensesProps) {
+export function VerbTenses({ tenses, infinitive }: VerbTensesProps) {
   const { includeTu, includeVos } = useSettings();
+  const [openTenses, setOpenTenses] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const storageKey = `conjugaí-expanded-${infinitive}`;
+
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const storedState = localStorage.getItem(storageKey);
+      if (storedState) {
+        setOpenTenses(JSON.parse(storedState));
+      }
+    } catch (e) {
+      console.error('Failed to load accordion state from localStorage', e);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (isMounted) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(openTenses));
+      } catch (e) {
+        console.error('Failed to save accordion state to localStorage', e);
+      }
+    }
+  }, [openTenses, storageKey, isMounted]);
+
 
   const filteredTenses = tenses.map((tense) => ({
     ...tense,
@@ -30,9 +59,19 @@ export function VerbTenses({ tenses }: VerbTensesProps) {
       return true;
     }),
   }));
+  
+  if (!isMounted) {
+    return (
+      <div className="w-full space-y-2">
+        {tenses.map((tense) => (
+          <div key={tense.name} className="h-[58px] rounded-lg shadow-md bg-card w-full animate-pulse" />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <Accordion type="multiple" className="w-full space-y-2">
+    <Accordion type="multiple" className="w-full space-y-2" value={openTenses} onValueChange={setOpenTenses}>
       {filteredTenses.map((tense) => (
         <AccordionItem value={tense.name} key={tense.name} className="border-b-0 rounded-lg shadow-md bg-card transition-shadow hover:shadow-lg">
           <AccordionTrigger className="px-4 py-3 font-headline text-lg text-primary/90 hover:no-underline rounded-lg">
