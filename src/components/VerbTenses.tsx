@@ -2,7 +2,7 @@
 
 import { useSettings } from '@/context/SettingsContext';
 import type { Tense } from '@/lib/types';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { BookText } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -41,13 +41,13 @@ export function VerbTenses({ tenses }: VerbTensesProps) {
               <span>{tense.name}</span>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="px-2 pt-0 pb-2">
+          <AccordionContent className="px-2 pt-0 pb-1">
             <Table>
               <TableBody>
                 {tense.conjugations.map((conj) => (
                   <TableRow key={conj.person} className="border-none">
-                    <TableCell className="w-1/3 py-2 text-muted-foreground capitalize">{conj.person}</TableCell>
-                    <TableCell className={cn("py-2", conj.isIrregular && 'font-bold text-primary')}>
+                    <TableCell className="w-1/3 py-1 text-muted-foreground capitalize text-xs">{conj.person}</TableCell>
+                    <TableCell className={cn("py-1 text-sm", conj.isIrregular && 'font-bold text-primary')}>
                       {conj.form}
                     </TableCell>
                   </TableRow>
