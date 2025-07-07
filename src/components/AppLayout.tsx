@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { BookOpen, Menu, ShieldCheck, Settings } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -74,6 +74,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col bg-card">
+               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                <NavContent isMobile />
             </SheetContent>
           </Sheet>
