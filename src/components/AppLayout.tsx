@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Menu, ShieldCheck } from 'lucide-react';
+import { BookOpen, Menu, ShieldCheck, Settings } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -13,6 +13,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const navItems = [
   { href: '/', label: 'Verbs', icon: BookOpen },
   { href: '/validator', label: 'Validator', icon: ShieldCheck },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 function NavContent({ isMobile = false }: { isMobile?: boolean }) {
