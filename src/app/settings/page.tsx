@@ -5,9 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
+import { TENSES } from '@/lib/verbs';
+import { Separator } from '@/components/ui/separator';
 
 export default function SettingsPage() {
-  const { theme, setTheme, includeTu, setIncludeTu, includeVos, setIncludeVos } = useSettings();
+  const {
+    theme,
+    setTheme,
+    includeTu,
+    setIncludeTu,
+    includeVos,
+    setIncludeVos,
+    tenseVisibility,
+    setTenseVisibility,
+  } = useSettings();
 
   return (
     <div className="space-y-8">
@@ -34,14 +45,20 @@ export default function SettingsPage() {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="light" id="light" />
-                <Label htmlFor="light" className="font-normal">Light</Label>
+                <Label htmlFor="light" className="font-normal">
+                  Light
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="dark" id="dark" />
-                <Label htmlFor="dark" className="font-normal">Dark</Label>
+                <Label htmlFor="dark" className="font-normal">
+                  Dark
+                </Label>
               </div>
             </RadioGroup>
           </div>
+
+          <Separator />
 
           <div className="space-y-4">
             <Label className="text-base font-semibold">Verb Conjugations</Label>
@@ -49,21 +66,38 @@ export default function SettingsPage() {
               <Label htmlFor="include-tu" className="font-normal">
                 Include 'tu' form
               </Label>
-              <Switch
-                id="include-tu"
-                checked={includeTu}
-                onCheckedChange={setIncludeTu}
-              />
+              <Switch id="include-tu" checked={includeTu} onCheckedChange={setIncludeTu} />
             </div>
             <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <Label htmlFor="include-vos" className="font-normal">
                 Include 'vós' form
               </Label>
-              <Switch
-                id="include-vos"
-                checked={includeVos}
-                onCheckedChange={setIncludeVos}
-              />
+              <Switch id="include-vos" checked={includeVos} onCheckedChange={setIncludeVos} />
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-4">
+            <Label className="text-base font-semibold">Visible Tenses</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              {TENSES.map((tense) => (
+                <div key={tense} className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <Label htmlFor={`tense-${tense}`} className="font-normal text-sm">
+                    {tense}
+                  </Label>
+                  <Switch
+                    id={`tense-${tense}`}
+                    checked={tenseVisibility[tense] ?? false}
+                    onCheckedChange={(checked) => {
+                      setTenseVisibility((prev) => ({
+                        ...prev,
+                        [tense]: checked,
+                      }));
+                    }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>

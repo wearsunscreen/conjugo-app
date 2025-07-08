@@ -12,9 +12,12 @@ interface VerbTensesProps {
 }
 
 export function VerbTenses({ tenses }: VerbTensesProps) {
-  const { includeTu, includeVos, openTenses, setOpenTenses, isMounted } = useSettings();
+  const { includeTu, includeVos, openTenses, setOpenTenses, isMounted, tenseVisibility } = useSettings();
 
-  const filteredTenses = tenses.map((tense) => ({
+  // Filter tenses based on visibility settings
+  const visibleTenses = tenses.filter(tense => tenseVisibility[tense.name]);
+
+  const filteredTenses = visibleTenses.map((tense) => ({
     ...tense,
     conjugations: tense.conjugations.filter((conj) => {
       if (!includeTu && conj.person.toLowerCase() === 'tu') {
@@ -29,12 +32,12 @@ export function VerbTenses({ tenses }: VerbTensesProps) {
       }
       return true;
     }),
-  }));
+  })).filter(tense => tense.conjugations.length > 0);
   
   if (!isMounted) {
     return (
       <div className="w-full space-y-2">
-        {tenses.map((tense) => (
+        {visibleTenses.map((tense) => (
           <div key={tense.name} className="h-[58px] rounded-lg shadow-md bg-card w-full animate-pulse" />
         ))}
       </div>
