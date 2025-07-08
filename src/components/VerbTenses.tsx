@@ -12,7 +12,7 @@ interface VerbTensesProps {
 }
 
 export function VerbTenses({ tenses }: VerbTensesProps) {
-  const { includeTu, includeVos, openTenses, setOpenTenses, isMounted, tenseVisibility } = useSettings();
+  const { includeInformal, openTenses, setOpenTenses, isMounted, tenseVisibility } = useSettings();
 
   // Filter tenses based on visibility settings
   const visibleTenses = tenses.filter(tense => tenseVisibility[tense.name]);
@@ -20,10 +20,7 @@ export function VerbTenses({ tenses }: VerbTensesProps) {
   const filteredTenses = visibleTenses.map((tense) => ({
     ...tense,
     conjugations: tense.conjugations.filter((conj) => {
-      if (!includeTu && conj.person.toLowerCase() === 'tu') {
-        return false;
-      }
-      if (!includeVos && conj.person.toLowerCase() === 'vós') {
+      if (!includeInformal && (conj.person.toLowerCase() === 'tu' || conj.person.toLowerCase() === 'vós')) {
         return false;
       }
       // Special filter for imperative forms

@@ -12,10 +12,8 @@ export default function SettingsPage() {
   const {
     theme,
     setTheme,
-    includeTu,
-    setIncludeTu,
-    includeVos,
-    setIncludeVos,
+    includeInformal,
+    setIncludeInformal,
     tenseVisibility,
     setTenseVisibility,
   } = useSettings();
@@ -63,16 +61,10 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <Label className="text-base font-semibold">Verb Conjugations</Label>
             <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
-              <Label htmlFor="include-tu" className="font-normal">
-                Include 'tu' form
+              <Label htmlFor="include-informal" className="font-normal">
+                Include 'tu' and 'vós' forms
               </Label>
-              <Switch id="include-tu" checked={includeTu} onCheckedChange={setIncludeTu} />
-            </div>
-            <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
-              <Label htmlFor="include-vos" className="font-normal">
-                Include 'vós' form
-              </Label>
-              <Switch id="include-vos" checked={includeVos} onCheckedChange={setIncludeVos} />
+              <Switch id="include-informal" checked={includeInformal} onCheckedChange={setIncludeInformal} />
             </div>
           </div>
 
