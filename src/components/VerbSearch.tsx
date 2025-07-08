@@ -32,7 +32,7 @@ export function VerbSearch({ verbs }: { verbs: VerbData[] }) {
           <ScrollArea className="h-96">
             <div className="p-4">
               {filteredVerbs.length > 0 ? (
-                <ul className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                   {filteredVerbs.map((verb) => (
                     <li key={verb.infinitive}>
                       <Button variant="ghost" asChild className="w-full justify-start">
