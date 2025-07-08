@@ -11,6 +11,9 @@ interface SettingsContextProps {
   setIncludeTu: (include: boolean) => void;
   includeVos: boolean;
   setIncludeVos: (include: boolean) => void;
+  openTenses: string[];
+  setOpenTenses: React.Dispatch<React.SetStateAction<string[]>>;
+  isMounted: boolean;
 }
 
 const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
@@ -19,6 +22,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
   const [includeTu, setIncludeTu] = useState(false);
   const [includeVos, setIncludeVos] = useState(false);
+  const [openTenses, setOpenTenses] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -31,6 +35,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
       const storedIncludeVos = localStorage.getItem('includeVos');
       if (storedIncludeVos) setIncludeVos(JSON.parse(storedIncludeVos));
+      
+      const storedOpenTenses = localStorage.getItem('openTenses');
+      if (storedOpenTenses) setOpenTenses(JSON.parse(storedOpenTenses));
+
     } catch (e) {
       console.error("Failed to load settings from local storage", e);
     }
@@ -56,7 +64,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [includeVos, isMounted]);
 
-  const value = { theme, setTheme, includeTu, setIncludeTu, includeVos, setIncludeVos };
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem('openTenses', JSON.stringify(openTenses));
+    }
+  }, [openTenses, isMounted]);
+
+  const value = { theme, setTheme, includeTu, setIncludeTu, includeVos, setIncludeVos, openTenses, setOpenTenses, isMounted };
 
   return (
     <SettingsContext.Provider value={value}>

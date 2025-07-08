@@ -28,7 +28,7 @@ export default function VerbPage({ params }: VerbPageProps) {
       <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary capitalize">
         {verbData.infinitive}
       </h1>
-      <VerbTenses tenses={verbData.tenses} infinitive={verbData.infinitive} />
+      <VerbTenses tenses={verbData.tenses} />
     </div>
   );
 }

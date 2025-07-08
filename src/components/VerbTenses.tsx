@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useSettings } from '@/context/SettingsContext';
 import type { Tense } from '@/lib/types';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -10,38 +9,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 interface VerbTensesProps {
   tenses: Tense[];
-  infinitive: string;
 }
 
-export function VerbTenses({ tenses, infinitive }: VerbTensesProps) {
-  const { includeTu, includeVos } = useSettings();
-  const [openTenses, setOpenTenses] = useState<string[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-
-  const storageKey = `conjugaí-expanded-${infinitive}`;
-
-  useEffect(() => {
-    setIsMounted(true);
-    try {
-      const storedState = localStorage.getItem(storageKey);
-      if (storedState) {
-        setOpenTenses(JSON.parse(storedState));
-      }
-    } catch (e) {
-      console.error('Failed to load accordion state from localStorage', e);
-    }
-  }, [storageKey]);
-
-  useEffect(() => {
-    if (isMounted) {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(openTenses));
-      } catch (e) {
-        console.error('Failed to save accordion state to localStorage', e);
-      }
-    }
-  }, [openTenses, storageKey, isMounted]);
-
+export function VerbTenses({ tenses }: VerbTensesProps) {
+  const { includeTu, includeVos, openTenses, setOpenTenses, isMounted } = useSettings();
 
   const filteredTenses = tenses.map((tense) => ({
     ...tense,
